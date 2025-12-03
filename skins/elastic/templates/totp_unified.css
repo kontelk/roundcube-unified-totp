@@ -1,0 +1,647 @@
+/**
+ * Roundcube Unified TOTP Plugin - Styles
+ * Skin: Elastic (Roundcube default theme)
+ * Version: 1.0.0
+ */
+
+/* ========================================================================
+   GENERAL STYLES
+   ======================================================================== */
+
+.totp-container {
+    padding: 20px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.totp-section {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.totp-section h3 {
+    margin-top: 0;
+    color: #333;
+    font-size: 18px;
+    font-weight: 600;
+    border-bottom: 2px solid #37beff;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+
+/* ========================================================================
+   STATUS INDICATORS
+   ======================================================================== */
+
+.totp-status {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.totp-status.enabled {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.totp-status.disabled {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.totp-status::before {
+    content: '';
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 8px;
+}
+
+.totp-status.enabled::before {
+    background-color: #28a745;
+}
+
+.totp-status.disabled::before {
+    background-color: #dc3545;
+}
+
+
+/* ========================================================================
+   VERIFICATION FORM
+   ======================================================================== */
+
+.totp-verify-container {
+    max-width: 400px;
+    margin: 100px auto;
+    padding: 40px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.totp-verify-container h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 10px;
+    font-size: 24px;
+}
+
+.totp-verify-container p {
+    text-align: center;
+    color: #666;
+    margin-bottom: 30px;
+}
+
+.totp-code-input {
+    width: 100%;
+    padding: 15px;
+    font-size: 24px;
+    text-align: center;
+    letter-spacing: 8px;
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+}
+
+.totp-code-input:focus {
+    outline: none;
+    border-color: #37beff;
+    box-shadow: 0 0 0 3px rgba(55, 190, 255, 0.1);
+}
+
+.totp-verify-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: #37beff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.totp-verify-btn:hover {
+    background-color: #2ba3e0;
+}
+
+.totp-verify-btn:active {
+    transform: scale(0.98);
+}
+
+.totp-backup-link {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+    color: #37beff;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.totp-backup-link:hover {
+    text-decoration: underline;
+}
+
+
+/* ========================================================================
+   SETUP DIALOG
+   ======================================================================== */
+
+#totp-setup-dialog {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+    z-index: 10000;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+#totp-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+}
+
+.totp-qr-container {
+    text-align: center;
+    margin: 20px 0;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 4px;
+}
+
+.totp-qr-container img {
+    max-width: 100%;
+    height: auto;
+    border: 2px solid #ddd;
+    border-radius: 4px;
+}
+
+.totp-secret-display {
+    background: #f0f0f0;
+    padding: 15px;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    word-break: break-all;
+    text-align: center;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+}
+
+.totp-info-box {
+    background: #e7f3ff;
+    border-left: 4px solid #37beff;
+    padding: 15px;
+    margin: 20px 0;
+    border-radius: 4px;
+}
+
+.totp-info-box strong {
+    color: #0066cc;
+}
+
+.totp-warning-box {
+    background: #fff3cd;
+    border-left: 4px solid #ffc107;
+    padding: 15px;
+    margin: 20px 0;
+    border-radius: 4px;
+    color: #856404;
+}
+
+
+/* ========================================================================
+   BUTTONS
+   ======================================================================== */
+
+.totp-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-right: 10px;
+}
+
+.totp-btn-primary {
+    background-color: #37beff;
+    color: white;
+}
+
+.totp-btn-primary:hover {
+    background-color: #2ba3e0;
+}
+
+.totp-btn-success {
+    background-color: #28a745;
+    color: white;
+}
+
+.totp-btn-success:hover {
+    background-color: #218838;
+}
+
+.totp-btn-danger {
+    background-color: #dc3545;
+    color: white;
+}
+
+.totp-btn-danger:hover {
+    background-color: #c82333;
+}
+
+.totp-btn-secondary {
+    background-color: #6c757d;
+    color: white;
+}
+
+.totp-btn-secondary:hover {
+    background-color: #5a6268;
+}
+
+.totp-btn:active {
+    transform: scale(0.98);
+}
+
+.totp-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+
+/* ========================================================================
+   BACKUP CODES
+   ======================================================================== */
+
+.totp-backup-codes {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.totp-backup-code {
+    background: #f8f9fa;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.totp-backup-code.used {
+    text-decoration: line-through;
+    opacity: 0.5;
+    background: #e9ecef;
+}
+
+.totp-backup-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+
+/* ========================================================================
+   SETTINGS PAGE
+   ======================================================================== */
+
+.totp-settings-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.totp-settings-row:last-child {
+    border-bottom: none;
+}
+
+.totp-settings-label {
+    font-weight: 600;
+    color: #333;
+}
+
+.totp-settings-value {
+    color: #666;
+}
+
+.totp-settings-actions {
+    display: flex;
+    gap: 10px;
+}
+
+
+/* ========================================================================
+   LOADING & ANIMATIONS
+   ======================================================================== */
+
+.totp-loading {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(55, 190, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #37beff;
+    animation: totp-spin 1s linear infinite;
+}
+
+@keyframes totp-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.totp-fade-in {
+    animation: totp-fade-in 0.3s ease-out;
+}
+
+@keyframes totp-fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* ========================================================================
+   MESSAGES & ALERTS
+   ======================================================================== */
+
+.totp-message {
+    padding: 15px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.totp-message::before {
+    content: '';
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    background-size: contain;
+}
+
+.totp-message-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.totp-message-error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.totp-message-warning {
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeaa7;
+}
+
+.totp-message-info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+    border: 1px solid #bee5eb;
+}
+
+
+/* ========================================================================
+   AUDIT LOG TABLE
+   ======================================================================== */
+
+.totp-audit-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.totp-audit-table th {
+    background-color: #f8f9fa;
+    padding: 12px;
+    text-align: left;
+    font-weight: 600;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.totp-audit-table td {
+    padding: 12px;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.totp-audit-table tr:hover {
+    background-color: #f8f9fa;
+}
+
+.totp-audit-success {
+    color: #28a745;
+    font-weight: 600;
+}
+
+.totp-audit-failure {
+    color: #dc3545;
+    font-weight: 600;
+}
+
+
+/* ========================================================================
+   RESPONSIVE DESIGN
+   ======================================================================== */
+
+@media (max-width: 768px) {
+    .totp-verify-container {
+        margin: 50px 20px;
+        padding: 30px 20px;
+    }
+
+    #totp-setup-dialog {
+        max-width: 90%;
+        padding: 20px;
+    }
+
+    .totp-backup-codes {
+        grid-template-columns: 1fr;
+    }
+
+    .totp-settings-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .totp-backup-actions {
+        flex-direction: column;
+    }
+
+    .totp-backup-actions .totp-btn {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .totp-code-input {
+        font-size: 20px;
+        letter-spacing: 5px;
+    }
+
+    .totp-audit-table {
+        font-size: 12px;
+    }
+
+    .totp-audit-table th,
+    .totp-audit-table td {
+        padding: 8px;
+    }
+}
+
+
+/* ========================================================================
+   PRINT STYLES (for backup codes)
+   ======================================================================== */
+
+@media print {
+    body * {
+        visibility: hidden;
+    }
+
+    .totp-backup-codes,
+    .totp-backup-codes * {
+        visibility: visible;
+    }
+
+    .totp-backup-codes {
+        position: absolute;
+        left: 0;
+        top: 0;
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .totp-btn,
+    #totp-backdrop,
+    .totp-warning-box {
+        display: none !important;
+    }
+}
+
+
+/* ========================================================================
+   DARK MODE SUPPORT (Optional - Future Feature)
+   ======================================================================== */
+
+@media (prefers-color-scheme: dark) {
+    .totp-container {
+        color: #e0e0e0;
+    }
+
+    .totp-section {
+        background: #2d2d2d;
+        border-color: #404040;
+    }
+
+    .totp-verify-container {
+        background: #2d2d2d;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .totp-code-input {
+        background: #1a1a1a;
+        color: #e0e0e0;
+        border-color: #404040;
+    }
+
+    .totp-secret-display {
+        background: #1a1a1a;
+        border-color: #404040;
+        color: #e0e0e0;
+    }
+
+    .totp-backup-code {
+        background: #1a1a1a;
+        border-color: #404040;
+        color: #e0e0e0;
+    }
+}
+
+
+/* ========================================================================
+   UTILITY CLASSES
+   ======================================================================== */
+
+.totp-hidden {
+    display: none !important;
+}
+
+.totp-text-center {
+    text-align: center;
+}
+
+.totp-text-muted {
+    color: #6c757d;
+}
+
+.totp-mb-0 {
+    margin-bottom: 0 !important;
+}
+
+.totp-mb-1 {
+    margin-bottom: 10px !important;
+}
+
+.totp-mb-2 {
+    margin-bottom: 20px !important;
+}
+
+.totp-mt-1 {
+    margin-top: 10px !important;
+}
+
+.totp-mt-2 {
+    margin-top: 20px !important;
+}
+
+.totp-p-1 {
+    padding: 10px !important;
+}
+
+.totp-p-2 {
+    padding: 20px !important;
+}
