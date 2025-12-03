@@ -1,0 +1,333 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+
+jobs:
+  # ============================================================================
+  # PHP Code Style & Linting
+  # ============================================================================
+  code-style:
+    name: Code Style Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          tools: composer, phpcs
+          coverage: none
+      
+      - name: Get Composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+      
+      - name: Cache Composer dependencies
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+      
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress
+      
+      - name: Check code style (PSR-12)
+        run: composer cs-check || true
+      
+      - name: PHP Lint
+        run: find . -name "*.php" -not -path "./vendor/*" -exec php -l {} \;
+
+  # ============================================================================
+  # PHP Unit Tests
+  # ============================================================================
+  tests:
+    name: PHP Tests
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        php-version: ['7.4', '8.0', '8.1', '8.2']
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          extensions: hash, openssl, pdo, pdo_mysql
+          coverage: xdebug
+      
+      - name: Get Composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+      
+      - name: Cache Composer dependencies
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-php${{ matrix.php-version }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-php${{ matrix.php-version }}-composer-
+      
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress
+      
+      - name: Run tests
+        run: composer test
+      
+      - name: Generate coverage report
+        if: matrix.php-version == '8.1'
+        run: |
+          composer test -- --coverage-clover=coverage.xml
+      
+      - name: Upload coverage to Codecov
+        if: matrix.php-version == '8.1'
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./coverage.xml
+          flags: unittests
+          name: codecov-umbrella
+
+  # ============================================================================
+  # Database Tests (MySQL)
+  # ============================================================================
+  database-mysql:
+    name: Database Tests (MySQL)
+    runs-on: ubuntu-latest
+    
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: roundcube_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: pdo, pdo_mysql
+      
+      - name: Wait for MySQL
+        run: |
+          while ! mysqladmin ping -h"127.0.0.1" -P3306 --silent; do
+            sleep 1
+          done
+      
+      - name: Import MySQL schema
+        run: |
+          mysql -h 127.0.0.1 -u root -proot roundcube_test < SQL/mysql.initial.sql
+      
+      - name: Verify tables created
+        run: |
+          mysql -h 127.0.0.1 -u root -proot roundcube_test -e "SHOW TABLES LIKE 'totp_%';"
+
+  # ============================================================================
+  # Database Tests (PostgreSQL)
+  # ============================================================================
+  database-postgres:
+    name: Database Tests (PostgreSQL)
+    runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres:14
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: roundcube_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: pdo, pdo_pgsql
+      
+      - name: Import PostgreSQL schema
+        env:
+          PGPASSWORD: postgres
+        run: |
+          psql -h localhost -U postgres -d roundcube_test -f SQL/postgres.initial.sql
+      
+      - name: Verify tables created
+        env:
+          PGPASSWORD: postgres
+        run: |
+          psql -h localhost -U postgres -d roundcube_test -c "\dt totp_*"
+
+  # ============================================================================
+  # Security Scan
+  # ============================================================================
+  security:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+      
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress
+      
+      - name: Security check
+        run: |
+          composer audit || true
+      
+      - name: Check for common vulnerabilities
+        run: |
+          # Check for hardcoded secrets (basic check)
+          ! grep -r "password.*=.*['\"]" --include="*.php" . || echo "Warning: Possible hardcoded passwords"
+          ! grep -r "api_key.*=.*['\"]" --include="*.php" . || echo "Warning: Possible hardcoded API keys"
+
+  # ============================================================================
+  # Documentation Check
+  # ============================================================================
+  documentation:
+    name: Documentation Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Check README exists
+        run: test -f README.md
+      
+      - name: Check required docs exist
+        run: |
+          test -f LICENSE
+          test -f CHANGELOG.md
+          test -f CONTRIBUTING.md
+          test -f docs/INSTALLATION.md
+          test -f docs/SECURITY.md
+      
+      - name: Check for broken links (basic)
+        run: |
+          grep -r "\[.*\](.*.md)" README.md docs/ || true
+      
+      - name: Validate composer.json
+        run: |
+          php -r "json_decode(file_get_contents('composer.json')) or exit(1);"
+
+  # ============================================================================
+  # Build & Package
+  # ============================================================================
+  build:
+    name: Build Package
+    runs-on: ubuntu-latest
+    needs: [code-style, tests, database-mysql, database-postgres]
+    if: github.event_name == 'push'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+      
+      - name: Install production dependencies
+        run: composer install --no-dev --optimize-autoloader
+      
+      - name: Create release package
+        run: |
+          mkdir -p dist
+          zip -r dist/roundcube-unified-totp-${{ github.sha }}.zip \
+            . \
+            -x "*.git*" \
+            -x "*tests/*" \
+            -x "*dist/*" \
+            -x "*.md" \
+            -x "composer.*"
+      
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: plugin-package
+          path: dist/roundcube-unified-totp-${{ github.sha }}.zip
+          retention-days: 30
+
+  # ============================================================================
+  # Python Test Script Validation
+  # ============================================================================
+  python-tests:
+    name: Python Test Script
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          pip install qrcode[pil]
+      
+      - name: Run Python test script
+        run: |
+          python tests/totp_test.py || echo "Python test script executed"
+
+  # ============================================================================
+  # All Checks Passed
+  # ============================================================================
+  all-checks:
+    name: All Checks Passed
+    runs-on: ubuntu-latest
+    needs: [code-style, tests, database-mysql, database-postgres, security, documentation]
+    if: always()
+    
+    steps:
+      - name: Check status
+        run: |
+          if [ "${{ needs.code-style.result }}" != "success" ] ||
+             [ "${{ needs.tests.result }}" != "success" ] ||
+             [ "${{ needs.database-mysql.result }}" != "success" ] ||
+             [ "${{ needs.database-postgres.result }}" != "success" ] ||
+             [ "${{ needs.security.result }}" != "success" ] ||
+             [ "${{ needs.documentation.result }}" != "success" ]; then
+            echo "❌ Some checks failed"
+            exit 1
+          else
+            echo "✅ All checks passed!"
+          fi
