@@ -1,0 +1,98 @@
+# Roundcube Unified TOTP - .gitignore
+
+# Configuration files with sensitive data
+config.inc.php
+*.local.php
+
+# IDE and Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+*.sublime-project
+*.sublime-workspace
+
+# Composer
+/vendor/
+composer.lock
+composer.phar
+
+# Node modules (if using any build tools)
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
+
+# Testing
+phpunit.xml
+.phpunit.result.cache
+tests/_output/
+tests/_support/_generated/
+coverage/
+
+# Logs
+*.log
+logs/
+*.log.*
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.temp
+*.cache
+
+# Backup files
+*.bak
+*.backup
+*~
+
+# OS generated files
+Thumbs.db
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Desktop.ini
+
+# Build artifacts
+dist/
+build/
+*.zip
+*.tar.gz
+*.tar.bz2
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Database
+*.sql.backup
+*.db
+
+# QR codes generated during testing
+*.png
+*.jpg
+*.jpeg
+!docs/images/*.png
+!docs/images/*.jpg
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+.venv
+
+# Documentation build
+docs/_build/
+docs/.doctrees/
