@@ -10,7 +10,7 @@
 
 ---
 
-## ✨ Χαρακτηριστικά
+## Χαρακτηριστικά
 
 - 🎯 **Unified TOTP**: Ένα secret για όλα τα alias domains.
 - 📱 **Universal Compatibility**: Λειτουργεί με Google Authenticator, Microsoft Authenticator, Authy, FreeOTP, και όλα τα TOTP apps.
@@ -22,7 +22,7 @@
 
 ---
 
-## 🎯 Πώς Λειτουργεί
+## Πώς Λειτουργεί
 
 ### Περιγραφή του προβλήματος με τα 'παραδοσιακά' TOTP
 Παραδοσιακά, κάθε email address (συμπεριλαμβανομένων των aliases) θα χρειαζόταν ξεχωριστό TOTP secret:
@@ -48,7 +48,7 @@ username@alias2.com   ─┘
 
 ---
 
-## 📋 Απαιτήσεις
+## Απαιτήσεις
 
 - **PHP**: ≥ 7.4
 - **Roundcube**: ≥ 1.5
@@ -60,7 +60,7 @@ username@alias2.com   ─┘
 
 ---
 
-## 🚀 Εγκατάσταση
+## Εγκατάσταση
 
 ### Βήμα 1: Κάνε Download το Plugin
 
@@ -135,9 +135,9 @@ sudo systemctl restart php7.4-fpm nginx
 
 ---
 
-## 📖 Χρήση
+## 📖 Οδηγίες Χρήσης
 
-### Για Χρήστες
+### Για Χρήστες του webmail
 
 #### Ενεργοποίηση 2FA
 
@@ -173,7 +173,7 @@ Login: username@alias2.com      → OTP: 123456 ✓
 
 Δεν χρειάζεται να σκανάρεις πολλαπλά QR codes.
 
-### Για Administrators
+### Για Administrators του webmail
 
 #### Υποχρεωτικό 2FA για Domains
 
@@ -210,7 +210,7 @@ LIMIT 10;
 
 ---
 
-## 🏗️ Αρχιτεκτονική
+## Αρχιτεκτονική του Plugin
 
 ### Database Schema
 
@@ -253,7 +253,7 @@ username@alias2.com   →  extract_username()  →  "username"
 
 ---
 
-## 🧪 Testing
+## Testing
 
 ### Python Test Script
 
@@ -283,7 +283,7 @@ python tests/totp_test.py
 
 ---
 
-## 🔐 Ασφάλεια
+## Ασφάλεια
 
 ### Best Practices
 
@@ -303,7 +303,7 @@ python tests/totp_test.py
 
 ---
 
-## 🛠️ Troubleshooting
+## 🛠️ Troubleshooting 
 
 ### "Invalid verification code"
 
@@ -349,7 +349,7 @@ $config['totp_qr_method'] = 'local';
 
 ---
 
-## 📚 Τεχνική Τεκμηρίωση
+## Τεχνική Τεκμηρίωση
 
 ### TOTP Standards
 
@@ -417,7 +417,7 @@ git push
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome! 
 
@@ -445,38 +445,11 @@ composer install --dev
 
 ---
 
-## 📄 License
+## License
 
 Αυτό το project είναι licensed under the **GNU General Public License v3.0**.
 
 Δες το [LICENSE](LICENSE) file για λεπτομέρειες.
-
----
-
-## 🙏 Acknowledgments
-
-- Roundcube Development Team
-- TOTP/HOTP Algorithm (RFC 6238, RFC 4226)
-- Contributors και community
-
----
-
-## 📞 Support
-
-- **Issues**: [GitHub Issues](https://github.com/yourusername/roundcube-unified-totp/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/yourusername/roundcube-unified-totp/discussions)
-- **Email**: support@yourdomain.com
-
----
-
-## 🗺️ Roadmap
-
-- [ ] WebAuthn/FIDO2 support
-- [ ] SMS backup authentication
-- [ ] Admin panel για bulk management
-- [ ] Mobile app για QR code scanning
-- [ ] Integration με LDAP/Active Directory
-- [ ] Multi-language support expansion
 
 ---
 
