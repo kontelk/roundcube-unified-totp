@@ -6,25 +6,25 @@
 
 **Two-Factor Authentication plugin για Roundcube με unified TOTP support για alias domains**
 
-Το **Roundcube Unified TOTP** είναι ένα plugin που προσθέτει Two-Factor Authentication (2FA) στο Roundcube webmail με μια μοναδική δυνατότητα: **ένα TOTP secret για όλα τα email aliases**. Οι χρήστες χρειάζονται μόνο ένα QR code στο authenticator app τους, ανεξάρτητα από το πόσα alias domains χρησιμοποιούν!
+Το **Roundcube Unified TOTP** είναι ένα plugin που προσθέτει Two-Factor Authentication (2FA) στο Roundcube webmail με σκοπό να προσφέρει τη δυνατότητα να υπάρχει **ένα κοινό TOTP secret για πολλαπλά email domain aliases**. Οι χρήστες χρειάζονται μόνο ένα QR code στο authenticator app τους, ανεξάρτητα από το πόσα alias domains χρησιμοποιούν.
 
 ---
 
 ## ✨ Χαρακτηριστικά
 
-- 🎯 **Unified TOTP**: Ένα secret για όλα τα alias domains
-- 📱 **Universal Compatibility**: Λειτουργεί με Google Authenticator, Microsoft Authenticator, Authy, FreeOTP, και όλα τα TOTP apps
-- 🔒 **Secure**: Encrypted secrets στη βάση, rate limiting, audit logging
-- 🌍 **Multilingual**: Υποστήριξη για πολλές γλώσσες (Αγγλικά, Ελληνικά)
-- ⚡ **Easy Setup**: QR code generation και εύκολη διαχείριση από το Roundcube UI
-- 🕐 **Clock Skew Tolerance**: Αυτόματη αντιμετώπιση clock drift
-- 📊 **Admin Features**: Audit logs, backup codes (optional)
+- 🎯 **Unified TOTP**: Ένα secret για όλα τα alias domains.
+- 📱 **Universal Compatibility**: Λειτουργεί με Google Authenticator, Microsoft Authenticator, Authy, FreeOTP, και όλα τα TOTP apps.
+- 🔒 **Secure**: Encrypted secrets στη βάση, rate limiting, audit logging.
+- 🌍 **Multilingual**: Υποστήριξη για πολλές γλώσσες (Αγγλικά, Ελληνικά).
+- ⚡ **Easy Setup**: QR code generation και εύκολη διαχείριση από το Roundcube UI.
+- 🕐 **Clock Skew Tolerance**: Αυτόματη αντιμετώπιση clock drift.
+- 📊 **Admin Features**: Audit logs, backup codes (optional).
 
 ---
 
 ## 🎯 Πώς Λειτουργεί
 
-### Το Πρόβλημα
+### Περιγραφή του προβλήματος με τα 'παραδοσιακά' TOTP
 Παραδοσιακά, κάθε email address (συμπεριλαμβανομένων των aliases) θα χρειαζόταν ξεχωριστό TOTP secret:
 
 ```
@@ -33,9 +33,9 @@ username@alias1.com     → Secret B → OTP 789012
 username@alias2.com     → Secret C → OTP 345678
 ```
 
-Αυτό δημιουργεί **πολλαπλά QR codes** και σύγχυση!
+Αυτό δημιουργεί **πολλαπλά QR codes** και σύγχυση στους χρήστες.
 
-### Η Λύση
+### Η Λύση του προβλήματος
 Το Unified TOTP εξάγει το **username** (χωρίς το domain) και το χρησιμοποιεί ως βάση:
 
 ```
@@ -44,7 +44,7 @@ username@alias1.com   ├──► "username" ──► Secret ABC ──► OTP
 username@alias2.com   ─┘
 ```
 
-**Αποτέλεσμα**: Ένα QR code, ένα OTP για όλα τα aliases! 🎉
+**Αποτέλεσμα**: Ένα QR code, ένα OTP για όλα τα aliases.
 
 ---
 
@@ -62,7 +62,7 @@ username@alias2.com   ─┘
 
 ## 🚀 Εγκατάσταση
 
-### Βήμα 1: Download το Plugin
+### Βήμα 1: Κάνε Download το Plugin
 
 ```bash
 cd /path/to/roundcube/plugins/
@@ -151,7 +151,7 @@ sudo systemctl restart php7.4-fpm nginx
    - Authy (Android/iOS/Desktop)
    - FreeOTP (Android/iOS)
 6. Εισήγαγε τον 6-ψήφιο κωδικό για επαλήθευση
-7. ✓ Έτοιμο! Το 2FA είναι ενεργό!
+7. Το 2FA είναι έτοιμο και ενεργό. ✓
 
 #### Login με 2FA
 
@@ -159,7 +159,7 @@ sudo systemctl restart php7.4-fpm nginx
 2. Άνοιξε το authenticator app σου
 3. Εισήγαγε τον 6-ψήφιο κωδικό που βλέπεις
 4. Κλικ **"Verify"**
-5. ✓ Login επιτυχημένο!
+5. Login επιτυχημένο. ✓
 
 #### Χρήση με Alias Domains
 
@@ -171,7 +171,7 @@ Login: username@alias1.com      → OTP: 123456 ✓
 Login: username@alias2.com      → OTP: 123456 ✓
 ```
 
-Δεν χρειάζεται να σκανάρεις πολλαπλά QR codes!
+Δεν χρειάζεται να σκανάρεις πολλαπλά QR codes.
 
 ### Για Administrators
 
