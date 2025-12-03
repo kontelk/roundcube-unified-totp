@@ -1,0 +1,62 @@
+{
+  "name": "roundcube/unified-totp",
+  "description": "Two-Factor Authentication plugin for Roundcube with unified TOTP support for alias domains",
+  "type": "roundcube-plugin",
+  "keywords": [
+    "roundcube",
+    "plugin",
+    "2fa",
+    "totp",
+    "two-factor",
+    "authentication",
+    "otp",
+    "security",
+    "alias-domains"
+  ],
+  "homepage": "https://github.com/yourusername/roundcube-unified-totp",
+  "license": "GPL-3.0-or-later",
+  "version": "1.0.0",
+  "authors": [
+    {
+      "name": "Your Name",
+      "email": "your.email@example.com",
+      "homepage": "https://github.com/yourusername",
+      "role": "Developer"
+    }
+  ],
+  "support": {
+    "email": "support@example.com",
+    "issues": "https://github.com/yourusername/roundcube-unified-totp/issues",
+    "source": "https://github.com/yourusername/roundcube-unified-totp"
+  },
+  "require": {
+    "php": ">=7.4",
+    "ext-hash": "*",
+    "ext-openssl": "*",
+    "roundcube/plugin-installer": ">=0.1.0 || >=0.2.0 || >=0.3.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^9.0",
+    "squizlabs/php_codesniffer": "^3.5"
+  },
+  "suggest": {
+    "ext-gd": "Required for local QR code generation",
+    "ext-imagick": "Alternative to GD for QR code generation"
+  },
+  "autoload": {
+    "classmap": [
+      "totp_unified.php"
+    ]
+  },
+  "extra": {
+    "roundcube": {
+      "min-version": "1.5.0",
+      "max-version": "1.7.0"
+    }
+  },
+  "scripts": {
+    "test": "phpunit",
+    "cs-check": "phpcs --standard=PSR12 *.php",
+    "cs-fix": "phpcbf --standard=PSR12 *.php"
+  }
+}
