@@ -1,0 +1,295 @@
+<?php
+
+/**
+ * Roundcube Unified TOTP Plugin - Configuration Template
+ * 
+ * Copy this file to config.inc.php and customize your settings
+ * 
+ * IMPORTANT: Keep this file secure and never commit config.inc.php to git!
+ */
+
+// ========================================================================
+// BASIC SETTINGS
+// ========================================================================
+
+// Issuer name that appears in authenticator apps
+// This helps users identify which service the code is for
+$config['totp_issuer'] = 'Roundcube Mail';
+
+// TOTP code length (6 or 8 digits)
+// Standard is 6 digits - only change if you have specific requirements
+$config['totp_digits'] = 6;
+
+// Time step in seconds (how long each code is valid)
+// Standard is 30 seconds - DO NOT change unless necessary
+$config['totp_period'] = 30;
+
+// Algorithm used for TOTP generation
+// Options: 'sha1', 'sha256', 'sha512'
+// Standard is 'sha1' - most authenticator apps only support this
+$config['totp_algorithm'] = 'sha1';
+
+// Base32 secret length (in characters)
+// Recommended: 32 for good security (160 bits)
+$config['totp_secret_length'] = 32;
+
+
+// ========================================================================
+// SECURITY SETTINGS
+// ========================================================================
+
+// Encryption key for storing secrets in database
+// CRITICAL: Generate a strong random key with: openssl rand -base64 32
+// NEVER use the example key below in production!
+$config['totp_encryption_key'] = 'REPLACE_WITH_RANDOM_KEY_FROM_OPENSSL';
+
+// Time tolerance for clock skew (in time steps)
+// 0 = no tolerance (very strict)
+// 1 = ±30 seconds (recommended for most cases)
+// 2 = ±60 seconds (more lenient, less secure)
+$config['totp_tolerance'] = 1;
+
+// Maximum failed login attempts before temporary lockout
+// Set to 0 to disable (not recommended)
+$config['totp_max_failed_attempts'] = 5;
+
+// Lockout duration in seconds after max failed attempts
+// Default: 900 seconds (15 minutes)
+$config['totp_lockout_duration'] = 900;
+
+// Session timeout after successful 2FA login (in seconds)
+// 0 = session lasts until browser is closed
+// 3600 = 1 hour
+// 86400 = 24 hours
+$config['totp_session_timeout'] = 0;
+
+
+// ========================================================================
+// ENFORCEMENT SETTINGS
+// ========================================================================
+
+// Require 2FA for all users
+// true = all users must enable 2FA
+// false = 2FA is optional
+$config['totp_required_for_all'] = false;
+
+// Require 2FA only for specific domains
+// Users with email addresses on these domains must use 2FA
+// Example: array('secure.company.com', 'admin.company.com')
+$config['totp_required_domains'] = array();
+
+// Grace period (in days) for users to enable required 2FA
+// After this period, login will be blocked until 2FA is enabled
+// Set to 0 for immediate enforcement
+$config['totp_grace_period_days'] = 7;
+
+// IP addresses or networks that bypass 2FA requirement
+// Useful for trusted internal networks
+// Format: array('192.168.1.0/24', '10.0.0.100')
+$config['totp_whitelist_ips'] = array();
+
+
+// ========================================================================
+// BACKUP & RECOVERY
+// ========================================================================
+
+// Enable backup codes for account recovery
+// Backup codes are one-time use codes in case the user loses their device
+$config['totp_backup_codes_enabled'] = true;
+
+// Number of backup codes to generate
+$config['totp_backup_codes_count'] = 10;
+
+// Allow backup codes to be regenerated
+$config['totp_backup_codes_regenerate'] = true;
+
+
+// ========================================================================
+// QR CODE SETTINGS
+// ========================================================================
+
+// QR code generation method
+// 'google' = Use Google Charts API (requires internet connection)
+// 'local' = Generate locally (requires GD or Imagick extension)
+$config['totp_qr_method'] = 'google';
+
+// QR code size (only for local generation)
+// Recommended: 200-300 pixels
+$config['totp_qr_size'] = 200;
+
+
+// ========================================================================
+// DATABASE SETTINGS
+// ========================================================================
+
+// Table name for storing TOTP secrets
+// Change only if you have table name conflicts
+$config['totp_table_name'] = 'totp_secrets';
+
+// Table name for backup codes
+$config['totp_backup_codes_table'] = 'totp_backup_codes';
+
+// Table name for audit logs
+$config['totp_audit_log_table'] = 'totp_audit_log';
+
+
+// ========================================================================
+// LOGGING & AUDITING
+// ========================================================================
+
+// Enable audit logging
+// Logs all 2FA-related events (enable, disable, login attempts)
+$config['totp_logging'] = true;
+
+// Log level
+// 0 = Disabled
+// 1 = Errors only
+// 2 = Warnings and errors
+// 3 = Info, warnings, and errors (recommended)
+// 4 = Debug (very verbose)
+$config['totp_log_level'] = 3;
+
+// Maximum age of audit logs (in days)
+// Older logs will be automatically purged
+// Set to 0 to keep logs indefinitely (not recommended)
+$config['totp_log_retention_days'] = 90;
+
+
+// ========================================================================
+// UI/UX SETTINGS
+// ========================================================================
+
+// Show 2FA status in settings (even when disabled)
+$config['totp_show_status_when_disabled'] = true;
+
+// Allow users to disable 2FA themselves
+// Set to false to require admin intervention to disable 2FA
+$config['totp_allow_user_disable'] = true;
+
+// Show setup instructions in user's language
+$config['totp_localized_instructions'] = true;
+
+// Custom help URL for 2FA setup
+// Leave empty to use built-in instructions
+$config['totp_help_url'] = '';
+
+
+// ========================================================================
+// ADVANCED SETTINGS
+// ========================================================================
+
+// Username normalization method
+// 'lowercase' = Convert to lowercase (recommended)
+// 'uppercase' = Convert to uppercase
+// 'none' = Use as-is (not recommended - case sensitive)
+$config['totp_username_normalization'] = 'lowercase';
+
+// Hash algorithm for username storage
+// 'none' = Store username in plaintext (default)
+// 'sha256' = Hash username with SHA-256 (more privacy)
+// Note: Hashing makes it harder to identify users in database
+$config['totp_username_hash_algorithm'] = 'none';
+
+// Custom issuer per domain
+// Override the global issuer for specific domains
+// Example: array('domain1.com' => 'Domain 1 Mail', 'domain2.com' => 'Domain 2')
+$config['totp_issuer_per_domain'] = array();
+
+// Enable rate limiting for API endpoints
+$config['totp_rate_limiting'] = true;
+
+// Rate limit: Maximum requests per minute
+$config['totp_rate_limit_per_minute'] = 10;
+
+// Cache TOTP verification results (in seconds)
+// Prevents replay attacks while allowing same code within window
+// Recommended: 30 (one time period)
+$config['totp_verification_cache_ttl'] = 30;
+
+
+// ========================================================================
+// NOTIFICATION SETTINGS
+// ========================================================================
+
+// Send email notification when 2FA is enabled
+$config['totp_notify_on_enable'] = true;
+
+// Send email notification when 2FA is disabled
+$config['totp_notify_on_disable'] = true;
+
+// Send email notification on failed login attempts
+$config['totp_notify_on_failed_attempts'] = true;
+
+// Email address for admin notifications
+// Leave empty to disable admin notifications
+$config['totp_admin_notification_email'] = '';
+
+
+// ========================================================================
+// INTEGRATION SETTINGS
+// ========================================================================
+
+// LDAP integration (if using LDAP for user authentication)
+$config['totp_ldap_enabled'] = false;
+
+// LDAP attribute to store 2FA status
+$config['totp_ldap_attribute'] = 'totpEnabled';
+
+// Webhook URL for 2FA events (optional)
+// Useful for integration with monitoring systems
+$config['totp_webhook_url'] = '';
+
+// Webhook authentication token
+$config['totp_webhook_token'] = '';
+
+
+// ========================================================================
+// DEVELOPMENT & TESTING
+// ========================================================================
+
+// Debug mode (DO NOT enable in production!)
+// Shows detailed error messages and disables some security features
+$config['totp_debug'] = false;
+
+// Test mode: Use fixed time for TOTP generation
+// Useful for automated testing - NEVER use in production!
+$config['totp_test_mode'] = false;
+$config['totp_test_time'] = null; // Unix timestamp or null
+
+// Allow HTTP (non-HTTPS) connections
+// SECURITY WARNING: Only use for development/testing!
+$config['totp_allow_http'] = false;
+
+
+// ========================================================================
+// NOTES
+// ========================================================================
+
+/*
+ * SECURITY RECOMMENDATIONS:
+ * 
+ * 1. ALWAYS use HTTPS in production
+ * 2. Generate a strong encryption key with: openssl rand -base64 32
+ * 3. Keep your config.inc.php file secure (chmod 600)
+ * 4. Never commit config.inc.php to version control
+ * 5. Enable audit logging for compliance
+ * 6. Regularly review failed login attempts
+ * 7. Use backup codes for account recovery
+ * 8. Consider requiring 2FA for admin/sensitive domains
+ * 
+ * PERFORMANCE RECOMMENDATIONS:
+ * 
+ * 1. Use 'local' QR code generation to avoid external API calls
+ * 2. Enable verification caching to prevent replay attacks
+ * 3. Set appropriate log retention to avoid database bloat
+ * 4. Use database indexes on frequently queried columns
+ * 
+ * COMPATIBILITY:
+ * 
+ * - Most authenticator apps only support SHA1 algorithm
+ * - Standard time period is 30 seconds
+ * - Standard code length is 6 digits
+ * - Only change these if absolutely necessary
+ */
+
+?>
